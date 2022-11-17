@@ -1,0 +1,33 @@
+--- step 1: Dig masterchef contracts ----
+
+[deployer] = await ethers.getSigners()
+
+MasterChefLikeJson = require("./artifacts/contracts/rescue/MasterChefHelper.sol/MasterChefLike.json")
+UniswapV2PairLikeJson = require("./artifacts/contracts/rescue/UniswapV2Like.sol/UniswapV2PairLike.json")
+
+masterchef = new ethers.Contract('0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd', MasterChefLikeJson.abi, deployer)
+ 
+
+[poolAddress] = await masterchef.callStatic.poolInfo(0)
+
+pair = new ethers.Contract(poolAddress, UniswapV2PairLikeJson.abi, deployer);
+
+await pair.callStatic.token0()
+await pair.callStatic.token1()
+
+
+ERC20LikeJson = require("./artifacts/contracts/rescue/MasterChefHelper.sol/ERC20Like.json")
+
+token0 = new ethers.Contract(await pair.callStatic.token0(), ERC20LikeJson.abi, deployer)
+token1 = new ethers.Contract(await pair.callStatic.token1(), ERC20LikeJson.abi, deployer)
+
+
+
+
+======
+[poolAddress2] = await masterchef.callStatic.poolInfo(1)
+
+pair2 = new ethers.Contract(poolAddress2, UniswapV2PairLikeJson.abi, deployer);
+
+token2 = new ethers.Contract(await pair2.callStatic.token0(), ERC20LikeJson.abi, deployer)
+token3 = new ethers.Contract(await pair2.callStatic.token1(), ERC20LikeJson.abi, deployer)

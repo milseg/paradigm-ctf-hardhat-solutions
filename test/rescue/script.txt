@@ -1,0 +1,11 @@
+1. Create liquidity pool that contains tokenA and WETH
+	- 0.1 WETH + 0.01 tokenA
+	- swapTokenForPoolToken(poolId, tokenA, 0.02, 0)
+		- Recebe 0.01 token A e 0.1 WETH
+		- Add liquidity 10.1 WETH e 1 tokenA deposited previously
+
+OR 
+two pools
+tokenA <--> tokenB
+tokenA <--> WETH
+swapTokenForPoolToken(poolId, tokenB, 0.02, 0) --> poolId == pool(tokenA, WETH)

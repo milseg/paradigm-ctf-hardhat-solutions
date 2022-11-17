@@ -1,0 +1,162 @@
+echo -n "6080604052348015600f57600080fd5b50604580601d6000396000f3fe6080604052303f60005260206000f3fea26469706673582212205937b9f37b00a4f5dc29f46098f58a7828f10581e3fa576c91face12dc2de08564736f6c63430008100033" | evmasm -d
+
+00000000: PUSH1 0x80
+00000002: PUSH1 0x40
+00000004: MSTORE
+00000005: CALLVALUE
+00000006: DUP1
+00000007: ISZERO
+00000008: PUSH1 0xf
+0000000a: JUMPI
+0000000b: PUSH1 0x0
+0000000d: DUP1
+0000000e: REVERT
+0000000f: JUMPDEST
+00000010: POP
+00000011: PUSH1 0x45
+00000013: DUP1
+00000014: PUSH1 0x1d
+00000016: PUSH1 0x0
+00000018: CODECOPY
+00000019: PUSH1 0x0
+0000001b: RETURN
+0000001c: INVALID
+0000001d: PUSH1 0x80
+0000001f: PUSH1 0x40
+00000021: MSTORE
+00000022: ADDRESS
+00000023: EXTCODEHASH
+00000024: PUSH1 0x0
+00000026: MSTORE
+00000027: PUSH1 0x20
+00000029: PUSH1 0x0
+0000002b: RETURN
+0000002c: INVALID
+0000002d: LOG2
+0000002e: PUSH5 0x6970667358
+00000034: INVALID
+00000035: SLT
+00000036: SHA3
+00000037: MSIZE
+00000038: CALLDATACOPY
+00000039: INVALID
+0000003a: RETURN
+0000003b: PUSH28 0xa4f5dc29f46098f58a7828f10581e3fa576c91face12dc2de08564
+
+
+
+--- Cleaner Code ---
+initialization code:
+PUSH1 0x0a
+PUSH1 0x0c
+PUSH1 0x00
+CODECOPY
+PUSH1 0x0a
+PUSH1 0x00
+RETURN 
+
+runtime code:
+ADDRESS
+EXTCODEHASH
+PUSH1 0x0
+MSTORE
+PUSH1 0x20
+PUSH1 0x0
+RETURN
+
+runtime code(bytecode):
+0x30
+0x3f
+0x60 0x00
+0x52
+0x60 0x20
+0x60 0x00
+0Xf3
+
+0x303f60005260206000f3
+
+
+
+runtime code V2:
+PUSH[subcode_size] [subcode]
+DUP1 -- subcode subcode
+PUSH1 0x1 -- 0x1 subcode subcode
+MSTORE -- subcode memory=[0x00subcode]
+PUSH1 [subcodesize+1] -- subcodesize+1 subcode memory=[0x00subcode]
+MSTORE -- memory=[0x00subcodesubcode]
+PUSH1 [push_opcode]
+PUSH1 0x0
+MSTORE8
+PUSH1 [code_size]
+PUSH1 0x0
+RETURN
+
+
+[pushopcode_size_bits] = 8
+[subcode_size] = 17bytes
+[code_size] = 2*[subcode_size] + 1 = 35 bytes (280 bits)
+
+PUSH32 [subcode]
+DUP1
+PUSH1 0x7f
+PUSH1 0x00
+MSTORE8
+PUSH1 0x01
+MSTORE
+PUSH1 0x21
+MSTORE
+PUSH1 0x41
+PUSH1 0x00
+RETURN
+PUSH14 0x0000000000000000000000000000
+
+=== bytecode ===
+0x7f80607f60005360015260215260416000f36d000000000000000000000000000080607f60005360015260215260416000f36d0000000000000000000000000000
+
+
+
+--- Discarded version ---
+PUSH[subcode_size] [subcode] -- subcode
+DUP1 -- subcode subcode
+PUSH1 [pushopcode] -- [pushopcode] subcode subcode
+PUSH1 [code_size_bits - pushopcode_size_bits] -- [code_size_bits - pushopcode_size_bits] [pushopcode] subcode subcode
+SHL -- [pushopcode]0...0 subcode subcode
+OR -- [pushopcode]subcode subcode
+
+PUSH1 [code_size_bits - (pushopcode_size_bits+subcode_size_bits)] -- [code_size_bits - (pushopcode_size_bits+subcode_size_bits)] [pushopcode]subcode subcode
+SHL --  [pushopcode]subcode0...0 subcode
+OR --  [pushopcode]subcodesubcode
+PUSH1 [code_address]
+MSTORE
+PUSH1 [code_size]
+PUSH1 [code_address]
+RETURN
+
+
+[code_address] = 0x00
+[pushopcode_size_bits] = 8
+[subcode_size] = 19bytes
+[subcode_size_bits] = 152
+[code_size] = 2*[subcode_size] + 1 = 39 bytes (312 bits)
+
+
+
+PUSH19 [subcode]
+DUP1
+PUSH1 
+PUSH1 304
+SHL
+OR
+
+PUSH1 [code_size_bits - (8+subcode_size_bits)] -- [code_size_bits - (pushopcode_size_bits+subcode_size_bits)] [pushopcode]subcode subcode
+SHL --  [pushopcode]subcode0...0 subcode
+OR --  [pushopcode]subcodesubcode
+PUSH1 [code_address]
+MSTORE
+PUSH1 [code_size]
+PUSH1 [code_address]
+RETURN
+
+
+
+0x73
