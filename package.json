@@ -12,7 +12,8 @@
     "merkledrop": "hardhat test test/merkledrop/merkledrop.ts",
     "random": "hardhat test test/random/random.ts",
     "rescue": "hardhat test test/rescue/rescue.ts",
-    "sourcecode": "hardhat test test/sourcecode/sourcecode.ts"
+    "sourcecode": "hardhat test test/sourcecode/sourcecode.ts",
+    "trapdooor": "hardhat test test/trapdooor/trapdooor.ts"
   },
   "author": "",
   "license": "ISC",
