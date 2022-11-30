@@ -13,7 +13,8 @@
     "random": "hardhat test test/random/random.ts",
     "rescue": "hardhat test test/rescue/rescue.ts",
     "sourcecode": "hardhat test test/sourcecode/sourcecode.ts",
-    "trapdooor": "hardhat test test/trapdooor/trapdooor.ts"
+    "trapdooor": "hardhat test test/trapdooor/trapdooor.ts",
+    "vanity": "hardhat test test/vanity/vanity.ts"
   },
   "author": "",
   "license": "ISC",
