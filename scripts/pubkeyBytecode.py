@@ -1,6 +1,11 @@
 from random import randint
 from eth_keys import keys
 
+def privToPub(privHexStr):
+	priv = bytearray.fromhex(privHexStr) #without 0x prefix
+	pub = keys.PrivateKey(priv).public_key
+	return pub.to_hex()[2:]
+
 # Need to find some a private key corresponding to a public key that is also valid bytecode. An easy way to do this is to find one with 
 # a public key that has a zero byte at the start (since this is the STOP instruction). 
 def find_account():

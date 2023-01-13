@@ -27,6 +27,17 @@ contract Lockbox2Like is Lockbox2 {
         console.log("gasSpentAfterStage5 %d", gasSpentAfterStage5);
     }
 }
-//gastoSend = gasSpentBeforeStage5 + x
+//gasLimit = gasSpentBeforeStage5 + x
 // (63/64)*x < gasSpentStage5
 // (1/64)*x >= gasSpentAfterStage5
+
+//before optimization
+//301838 + x
+//(63/64)*x < 319068  --> x < 64*319068/63 --> x < 324132.5714285714
+//x/64 >= 5964 --> x >= 381696 --> need to reduce gas after cost
+
+//After optimization (access list)
+//301838 + x
+//(63/64)*x < 319068  --> x < 64*319068/63 --> x < 324132.5714285714
+//x/64 >= 3964 --> x >= 253696 --> need to reduce gas after cost
+//choose x=300000 --> gasLimit = 301838 + 300000 = 601838 + extra_initial_gas = 601838 + 24150 = 625988
