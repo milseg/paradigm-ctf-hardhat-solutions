@@ -14,7 +14,8 @@
     "rescue": "hardhat test test/rescue/rescue.ts",
     "sourcecode": "hardhat test test/sourcecode/sourcecode.ts",
     "trapdooor": "hardhat test test/trapdooor/trapdooor.ts",
-    "vanity": "hardhat test test/vanity/vanity.ts"
+    "vanity": "hardhat test test/vanity/vanity.ts",
+    "lockbox2": "hardhat test test/lockbox2/lockbox2.ts"
   },
   "author": "",
   "license": "ISC",
